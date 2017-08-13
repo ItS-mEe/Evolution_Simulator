@@ -83,7 +83,8 @@ class Map{
         if(organism.getX() < 0) organism.setX(organism.getX() + w);
         if(organism.getY() > h) organism.setY(organism.getY() - h);
         if(organism.getY() < 0) organism.setY(organism.getY() + h);
-        organism.energy -= (organism.getXSpeed() + organism.getYSpeed());
+        organism.energy -= (Math.abs(organism.getXSpeed()) + Math.abs(organism.getYSpeed()));
+        organism.energy -= 1;
         for(int j = 0; j < food.size(); j++){
           Food checkFood = food.get(j);
           if(calculateDistance(organism.getX(), checkFood.getX(), organism.getY(), checkFood.getY()) < organism.getRadius() + checkFood.getRadius()){
@@ -110,7 +111,7 @@ class Map{
                       checkOrganism.energy += organism.energy;
                       organisms.remove(i);
                       i--;
-                      //println("eat!");
+                      println("eat!");
                     }
                   }
                 }else{
@@ -119,14 +120,14 @@ class Map{
                       organism.energy += checkOrganism.energy;
                       organisms.remove(j);
                       j--;
-                      //println("eat!");
+                      println("eat!");
                     }
                   }else{
                     if(Math.random() < 0.5){
                       organism.energy += checkOrganism.energy;
                       organisms.remove(j);
                       j--;
-                      //println("eat!");
+                      println("eat!");
                     }else{
                       checkOrganism.energy += organism.energy;
                       organisms.remove(i);

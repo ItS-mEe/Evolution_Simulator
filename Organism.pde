@@ -27,24 +27,17 @@ class Organism{
     buildBrain();
   }
   
-  public int getHue(){
-    return hue;
-  }
-  
-  public int getRadius(){
-    return radius;
-  }
-  
-  public int getCollisionTimer(){
-    return collisionTimer;
-  }
-  
-  public void setCollisionTimer(int timer){
-    collisionTimer = timer;
-  }
-  private void buildBrain(){
-    thisOrganism = this;
-    brain = new NeuralNetwork(this);
+  public Organism(int x, int y, int radius, double energy, Organism parents){
+    collisionTimer = 0;
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.hue = parents.getHue();
+    this.energy = energy;
+    xSpeed = 0;
+    ySpeed = 0;
+    mem1 = 0;
+    conflictReaction = false;
     InputNeuron nearestOrganismXdiff = new InputNeuron(){
       public double output(){
         Organism nearestOrganism = map.findNearestOrganism(thisOrganism);        
@@ -95,6 +88,7 @@ class Organism{
           xDist += map.w;
         }
         return xDist;
+        //return 0;
       }
     };
     
@@ -113,11 +107,13 @@ class Organism{
           yDist += map.h;
         }
         return yDist;
+        //return 0;
       }
     };
     InputNeuron timeElapsed = new InputNeuron(){
       public double output(){
         return map.time;
+        //return 0;
       }
     };
     InputNeuron constant = new InputNeuron(){
@@ -128,6 +124,121 @@ class Organism{
     InputNeuron mem1 = new InputNeuron(){
       public double output(){
         return getMem1();
+        //return 0;
+      }
+    };
+    brain = parents.getBrain().clone(nearestOrganismXdiff, nearestOrganismYdiff, nearestFoodXdiff, nearestFoodYdiff, timeElapsed, constant, mem1);
+  }
+  
+  public NeuralNetwork getBrain(){
+    return brain;
+  }
+  
+  public int getHue(){
+    return hue;
+  }
+  
+  public int getRadius(){
+    return radius;
+  }
+  
+  public int getCollisionTimer(){
+    return collisionTimer;
+  }
+  
+  public void setCollisionTimer(int timer){
+    collisionTimer = timer;
+  }
+  private void buildBrain(){
+    thisOrganism = this;
+    brain = new NeuralNetwork();
+    InputNeuron nearestOrganismXdiff = new InputNeuron(){
+      public double output(){
+        Organism nearestOrganism = map.findNearestOrganism(thisOrganism);        
+        double xDist = getX() - nearestOrganism.getX();
+        if(xDist > map.w / 2){
+          xDist -= map.w;
+        }else if(xDist < -map.w / 2){
+          xDist += map.w;
+        }
+        if(xDist > map.w / 2){
+          xDist -= map.w;
+        }else if(xDist < -map.w / 2){
+          xDist += map.w;
+        }
+        return xDist;
+      }
+    };
+    
+    InputNeuron nearestOrganismYdiff = new InputNeuron(){
+      public double output(){
+        Organism nearestOrganism = map.findNearestOrganism(thisOrganism);        
+        double yDist = getY() - nearestOrganism.getY();
+        if(yDist > map.h / 2){
+          yDist -= map.h;
+        }else if(yDist < -map.h / 2){
+          yDist += map.h;
+        }
+        if(yDist > map.h / 2){
+          yDist -= map.h;
+        }else if(yDist < -map.h / 2){
+          yDist += map.h;
+        }
+        return yDist;
+      }
+    };
+    InputNeuron nearestFoodXdiff = new InputNeuron(){
+      public double output(){
+        Food nearestFood = map.findNearestFood(thisOrganism);        
+        double xDist = getX() - nearestFood.getX();
+        if(xDist > map.w / 2){
+          xDist -= map.w;
+        }else if(xDist < -map.w / 2){
+          xDist += map.w;
+        }
+        if(xDist > map.w / 2){
+          xDist -= map.w;
+        }else if(xDist < -map.w / 2){
+          xDist += map.w;
+        }
+        return xDist;
+        //return 0;
+      }
+    };
+    
+    InputNeuron nearestFoodYdiff = new InputNeuron(){
+      public double output(){
+        Food nearestFood = map.findNearestFood(thisOrganism);        
+        double yDist = getY() - nearestFood.getY();
+        if(yDist > map.h / 2){
+          yDist -= map.h;
+        }else if(yDist < -map.h / 2){
+          yDist += map.h;
+        }
+        if(yDist > map.h / 2){
+          yDist -= map.h;
+        }else if(yDist < -map.h / 2){
+          yDist += map.h;
+        }
+        return yDist;
+        //return 0;
+      }
+    };
+    InputNeuron timeElapsed = new InputNeuron(){
+      public double output(){
+        return map.time;
+        //return 0;
+      }
+    };
+    InputNeuron constant = new InputNeuron(){
+      public double output(){
+        return 1;
+      }
+    };
+    InputNeuron mem1 = new InputNeuron(){
+      public double output(){
+        return getMem1();
+        //return 0;
       }
     };
     brain.createNetwork(4, nearestOrganismXdiff, nearestOrganismYdiff, nearestFoodXdiff, nearestFoodYdiff, timeElapsed, constant, mem1);

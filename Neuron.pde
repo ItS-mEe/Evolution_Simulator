@@ -10,20 +10,24 @@ class Neuron{
   
   public void randomizeWeights() {
     for(int i = 0; i<weights.length; i++){
-      weights[i] = (int)(Math.random() * 2 - 1);
+      weights[i] = Math.random() * 3 - 1;
     }
   }
   
   public double output(){
     double sum = 0;
     for(int i = 0; i<input.length; i++){
-      sum += sigmoid(input[i].output()*weights[i]);
+      sum += input[i].output()*weights[i];
     }
-    return sum;
+    return sigmoid(sum);
   }
   
   public void setWeight(double value, int toSet){
     weights[toSet] = value;
+  }
+  
+  public double getWeight(int toGet){
+    return weights[toGet];
   }
     
   private double sigmoid(double input){
