@@ -8,16 +8,17 @@ class NeuralNetwork {
     //belongedOrganism = organism;
   }
   
+  //Clone and return this NeuralNetwork
   public NeuralNetwork clone(InputNeuron... inputs){
-    NeuralNetwork newCopy = new NeuralNetwork();
-    newCopy.createNetwork(outputs.length, inputs);
-    Neuron[][] thisHiddenLayers = getHiddenLayers();
-    Neuron[][] newHiddenLayers = newCopy.getHiddenLayers();
-    for(int i = 0; i < thisHiddenLayers.length; i++){
-      for(int j = 0; j < thisHiddenLayers[i].length; j++){
-        for(int n = 0; n < inputs.length - 1; n++){
+    NeuralNetwork newCopy = new NeuralNetwork();//Create a blank neural network
+    newCopy.createNetwork(outputs.length, inputs);//Send the inputs into the network
+    Neuron[][] thisHiddenLayers = getHiddenLayers();//Get hidden layers
+    Neuron[][] newHiddenLayers = newCopy.getHiddenLayers();//Create new blank hidden layers
+    for(int i = 0; i < thisHiddenLayers.length; i++){//For each layers
+      for(int j = 0; j < thisHiddenLayers[i].length; j++){//For each neuron in the layor
+        for(int n = 0; n < inputs.length - 1; n++){//For each input the neuron has
           println(n);
-          newHiddenLayers[i][j].setWeight(thisHiddenLayers[i][j].getWeight(n), n);
+          newHiddenLayers[i][j].setWeight(thisHiddenLayers[i][j].getWeight(n), n);//Set the weight of the neuron's orignial neural network weight to the input to the new one
         }
       }
     }
@@ -28,6 +29,7 @@ class NeuralNetwork {
     return hiddenLayers;
   }
   
+  //Creating a new neural network with the specific inputs
   public void createNetwork(int numOutputs, InputNeuron... inputs){
     this.inputs = inputs;
     hiddenLayers = new Neuron[2][this.inputs.length-1];

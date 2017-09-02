@@ -1,4 +1,6 @@
 class Organism{
+  
+  //Declaring outputs
   private double xSpeed;
   private double ySpeed;
   private boolean conflictReaction;
@@ -13,6 +15,7 @@ class Organism{
   private int hue;
   public double energy;
   
+  //Construct an organism with a randomized brain
   public Organism(int x, int y, int radius, int hue, double energy){
     collisionTimer = 0;
     this.x = x;
@@ -24,9 +27,10 @@ class Organism{
     ySpeed = 0;
     mem1 = 0;
     conflictReaction = false;
-    buildBrain();
+    buildBrain();//Build a randomized brain
   }
   
+  //Construct an organism with a cloned brain to it's parent
   public Organism(int x, int y, int radius, double energy, Organism parents){
     collisionTimer = 0;
     this.x = x;
@@ -38,6 +42,8 @@ class Organism{
     ySpeed = 0;
     mem1 = 0;
     conflictReaction = false;
+    
+    //Defining the inputs
     InputNeuron nearestOrganismXdiff = new InputNeuron(){
       public double output(){
         Organism nearestOrganism = map.findNearestOrganism(thisOrganism);        
@@ -127,7 +133,8 @@ class Organism{
         //return 0;
       }
     };
-    brain = parents.getBrain().clone(nearestOrganismXdiff, nearestOrganismYdiff, nearestFoodXdiff, nearestFoodYdiff, timeElapsed, constant, mem1);
+    
+    brain = parents.getBrain().clone(nearestOrganismXdiff, nearestOrganismYdiff, nearestFoodXdiff, nearestFoodYdiff, timeElapsed, constant, mem1);//Clone the parent's brain
   }
   
   public NeuralNetwork getBrain(){
@@ -149,9 +156,11 @@ class Organism{
   public void setCollisionTimer(int timer){
     collisionTimer = timer;
   }
-  private void buildBrain(){
+  private void buildBrain(){//Create a randomized brain
     thisOrganism = this;
     brain = new NeuralNetwork();
+    
+    //Defining inputs
     InputNeuron nearestOrganismXdiff = new InputNeuron(){
       public double output(){
         Organism nearestOrganism = map.findNearestOrganism(thisOrganism);        
@@ -243,6 +252,8 @@ class Organism{
     };
     brain.createNetwork(4, nearestOrganismXdiff, nearestOrganismYdiff, nearestFoodXdiff, nearestFoodYdiff, timeElapsed, constant, mem1);
   }
+  
+  //Update the organism's status based on what the neural network output.
   public void update(){
     double[] outputs = brain.getOutputs();
     setXSpeed(outputs[0]);

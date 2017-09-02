@@ -1,13 +1,14 @@
 class Neuron{
-  
+  //Decaring this neuron's inputs and the weight they have to this neuron.
   Neuron[] input;
   double[] weights;
   
+  //Construcing this neuron and give it inputs
   public Neuron(Neuron... input){
     this.input = input;
     weights = new double[input.length];
   }
-  
+ 
   public void randomizeWeights() {
     for(int i = 0; i<weights.length; i++){
       weights[i] = Math.random() * 3 - 1;
